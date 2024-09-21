@@ -1,6 +1,6 @@
 import 'package:contact_message_app/presentation/pages/home_page/home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:contact_message_app/common/core/theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,11 +11,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      
+    return MaterialApp(
+      theme: appTheme,
       debugShowCheckedModeBanner: false,
-      home: SafeArea(child: HomePage()),
+      home: const SafeArea(child: HomePage()),
     );
   }
 }
-

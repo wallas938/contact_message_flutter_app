@@ -8,13 +8,14 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             const MenuButtonList(),
             const SizedBox(height: 50,),
-            const Divider(thickness: 5, color: Colors.grey,),
+            Divider(thickness: 5, color: Theme.of(context).dividerColor,),
             const SizedBox(height: 20,),
             Expanded(child: ContactList(contacts: contacts))
           ],

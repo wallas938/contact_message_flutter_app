@@ -7,6 +7,9 @@ class ContactItem extends StatelessWidget {
   final int scores;
   final ContactRole role;
 
+  final TextStyle styleBase = const TextStyle(
+      fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white);
+
   const ContactItem(
       {super.key,
       required this.name,
@@ -17,14 +20,19 @@ class ContactItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Text(profile),
+      leading: Container(
+        padding: const EdgeInsets.all(6),
+        decoration: BoxDecoration(
+            color: Theme.of(context).hintColor,
+            border: Border.all(color: Colors.white, width: 1)),
+        child: Text(profile, style: styleBase.copyWith(fontSize: 8)),
+      ),
       title: Text(name),
       subtitle: Text(role.name),
       trailing: CircleAvatar(
         radius: 15,
         backgroundColor: Colors.deepOrange,
-        child: Text(scores.toString(),
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white)),
+        child: Text(scores.toString(), style: styleBase),
       ),
     );
   }
