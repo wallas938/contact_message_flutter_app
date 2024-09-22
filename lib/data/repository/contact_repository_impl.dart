@@ -1,3 +1,15 @@
+import 'package:contact_message_app/business/models/contact/contact_model.dart';
+import 'package:contact_message_app/data/provider/contatc_data_provider.dart';
 import 'package:contact_message_app/data/repository/contact_repository.dart';
 
-class ContactRepositoryImpl extends ContactRepository {}
+class ContactRepositoryImpl extends ContactRepository {
+
+  final ContactDataProvider contactDataProvider;
+
+  ContactRepositoryImpl({required this.contactDataProvider});
+
+  @override
+  Future<List<ContactModel>> getAllContacts() async{
+    return await contactDataProvider.getAllContacts();
+  }
+}

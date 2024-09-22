@@ -23,7 +23,7 @@ class ContactItem extends StatelessWidget {
       leading: Container(
         padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
-            color: Theme.of(context).hintColor,
+            color: Theme.of(context).primaryColor,
             border: Border.all(color: Colors.white, width: 1)),
         child: Text(profile, style: styleBase.copyWith(fontSize: 8)),
       ),
