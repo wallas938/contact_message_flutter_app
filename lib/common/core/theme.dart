@@ -10,6 +10,5 @@ var appTheme = ThemeData(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
     ),
     hintColor: Colors.redAccent,
-    dividerColor: Colors.blue[300],
     scaffoldBackgroundColor: Colors.white,
     textTheme: GoogleFonts.pacificoTextTheme());

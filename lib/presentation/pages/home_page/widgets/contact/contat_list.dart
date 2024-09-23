@@ -18,8 +18,8 @@ class ContactList extends StatelessWidget {
             role: contacts[index].role);
       },
       separatorBuilder: (context, index) {
-        return const Divider(
-          color: Colors.deepOrange,
+        return Divider(
+          color: Theme.of(context).hintColor,
           height: 1,
         );
       },
