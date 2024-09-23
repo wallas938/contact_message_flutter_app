@@ -32,6 +32,14 @@ class HomePage extends StatelessWidget {
             ),
             Expanded(child: BlocBuilder<ContactBloc, ContactState>(
               builder: (context, state) {
+                if (state.loading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (state.exception.hasError) {
+                  return Center(child: Text(state.exception.errorMessage));
+                }
+
                 return ContactList(contacts: state.contacts);
               },
             ))

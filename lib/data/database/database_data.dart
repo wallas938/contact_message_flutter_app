@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:contact_message_app/business/models/contact/contact_enum.dart';
 import 'package:contact_message_app/business/models/contact/contact_model.dart';
 
@@ -41,8 +43,14 @@ class Database {
         name: "Pierre", profile: "PI", scores: 58, role: ContactRole.student),
   ];
 
-  Future<List<ContactModel>> get contacts async => Future.delayed(
-        const Duration(seconds: 1),
-        () => _contacts,
-      ); //
+  Future<List<ContactModel>> get contacts async {
+    Random random = Random();
+    int randomNumber = 0 + random.nextInt(10 - 0);
+    print(randomNumber);
+    return Future.delayed(
+        const Duration(milliseconds: 2500),
+        () => randomNumber >= 2
+            ? _contacts
+            : throw Exception("Erreur Test"));
+  } //
 }
