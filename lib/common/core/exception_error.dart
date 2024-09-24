@@ -1,5 +1,3 @@
-import 'dart:io';
-
 class ErrorRequestException {
   final String errorMessage;
   final bool hasError;

@@ -2,7 +2,6 @@ import 'package:contact_message_app/business/bloc/contact/contact_bloc.dart';
 import 'package:contact_message_app/presentation/pages/home_page/widgets/contact/contat_list.dart';
 import 'package:contact_message_app/presentation/pages/home_page/widgets/menu/menu_button_list.dart';
 import 'package:flutter/material.dart';
-import 'package:contact_message_app/data/database/database_data.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatelessWidget {

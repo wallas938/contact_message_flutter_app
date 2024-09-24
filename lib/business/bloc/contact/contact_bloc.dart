@@ -37,6 +37,9 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
   final ContactRepository contactRepository;
 
   ContactBloc(this.contactRepository) : super(initialState) {
+
+    /* ------------- GET ALL CONTACTS ---------------*/
+
     on<ContactGetAllStartEvent>((event, emit) async {
       const error = ErrorRequestException(errorMessage: "", hasError: false);
       emit(state.copyWith(loading: true, exception: error));
@@ -53,8 +56,32 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     on<ContactGetAllSuccessEvent>((event, emit) async {
       emit(state.copyWith(contacts: event.contacts, loading: false));
     });
-
     on<ContactGetAllFailedEvent>((event, emit) async {
+      emit(
+        state.copyWith(loading: false, exception: event.errorRequestException),
+      );
+    });
+
+    /* ------------- GET CONTACTS BY ROLE---------------*/
+
+    on<ContactGetByRoleStartEvent>((event, emit) async {
+      const error = ErrorRequestException(errorMessage: "", hasError: false);
+      emit(state.copyWith(loading: true, exception: error));
+      try {
+        List<ContactModel> payload =
+            await contactRepository.getContactsByRole(event.role);
+        add(ContactGetByRoleSuccessEvent(contacts: payload));
+      } on Exception {
+        const error = ErrorRequestException(
+            errorMessage: "Erreur lors du chargement des contacts par rôle",
+            hasError: true);
+        add(ContactGetByRoleFailedEvent(errorRequestException: error));
+      }
+    });
+    on<ContactGetByRoleSuccessEvent>((event, emit) async {
+      emit(state.copyWith(contacts: event.contacts, loading: false));
+    });
+    on<ContactGetByRoleFailedEvent>((event, emit) async {
       emit(
         state.copyWith(loading: false, exception: event.errorRequestException),
       );
