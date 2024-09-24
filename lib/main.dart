@@ -19,21 +19,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-            create: (context) => ContactBloc(ContactRepositoryImpl(
-                contactDataProvider: ContactDataProviderImpl())))
-      ],
-      child: MultiRepositoryProvider(
+    return MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider(create: (context) => ContactRepositoryImpl()),
+        ],
+        child: MultiBlocProvider(
           providers: [
-            RepositoryProvider(create: (context) => ContactRepositoryImpl(contactDataProvider: ContactDataProviderImpl())),
+            BlocProvider(
+                create: (context) =>
+                    ContactBloc(context.read<ContactRepositoryImpl>()))
           ],
           child: MaterialApp(
             theme: appTheme,
             debugShowCheckedModeBanner: false,
             home: const SafeArea(child: HomePage()),
-          )),
-    );
+          ),
+        ));
   }
 }
