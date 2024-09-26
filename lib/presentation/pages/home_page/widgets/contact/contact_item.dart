@@ -1,38 +1,34 @@
-import 'package:contact_message_app/business/models/contact/contact_enum.dart';
+import 'package:contact_message_app/business/models/contact/contact.model.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ContactItem extends StatelessWidget {
-  final String name;
-  final String profile;
-  final int scores;
-  final ContactRole role;
+  final ContactModel contact;
 
   final TextStyle styleBase = const TextStyle(
       fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white);
 
-  const ContactItem(
-      {super.key,
-      required this.name,
-      required this.profile,
-      required this.scores,
-      required this.role});
+  const ContactItem({super.key, required this.contact});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: () {
+        context.go('/messages/${contact.id}');
+      },
       leading: Container(
         padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
             color: Theme.of(context).primaryColor,
             border: Border.all(color: Colors.white, width: 1)),
-        child: Text(profile, style: styleBase.copyWith(fontSize: 8)),
+        child: Text(contact.profile, style: styleBase.copyWith(fontSize: 8)),
       ),
-      title: Text(name),
-      subtitle: Text(role.name),
+      title: Text(contact.name),
+      subtitle: Text(contact.role.name),
       trailing: CircleAvatar(
         radius: 15,
         backgroundColor: Colors.deepOrange,
-        child: Text(scores.toString(), style: styleBase),
+        child: Text(contact.scores.toString(), style: styleBase),
       ),
     );
   }

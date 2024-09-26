@@ -1,8 +1,8 @@
-import 'package:contact_message_app/business/models/contact/contact_enum.dart';
-import 'package:contact_message_app/business/models/contact/contact_model.dart';
-import 'package:contact_message_app/business/repository/contact_repository.dart';
-import 'package:contact_message_app/data/provider/contact_data_provider_impl.dart';
-import 'package:contact_message_app/data/provider/contatc_data_provider.dart';
+import 'package:contact_message_app/business/models/contact/contact.enum.dart';
+import 'package:contact_message_app/business/models/contact/contact.model.dart';
+import 'package:contact_message_app/business/repository/contact.repository.dart';
+import 'package:contact_message_app/data/provider/contact.data.provider.impl.dart';
+import 'package:contact_message_app/data/provider/contact.data.provider.dart';
 import 'package:get_it/get_it.dart';
 
 class ContactRepositoryImpl extends ContactRepository {
