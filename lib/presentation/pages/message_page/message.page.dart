@@ -2,11 +2,11 @@ import 'package:contact_message_app/business/bloc/contact/contact.bloc.dart';
 import 'package:contact_message_app/business/models/contact/contact.enum.dart';
 import 'package:contact_message_app/business/models/contact/contact.model.dart';
 import 'package:contact_message_app/business/models/message/message.model.dart';
+import 'package:contact_message_app/presentation/pages/home_page/widgets/message/message.drawer.widget.dart';
+import 'package:contact_message_app/presentation/pages/home_page/widgets/message/message.header.widget.dart';
+import 'package:contact_message_app/presentation/pages/home_page/widgets/message/message.list.widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:contact_message_app/data/database/database.data.dart';
-import 'package:get_it/get_it.dart';
-import 'package:uuid/v4.dart';
 
 List<ContactModel> contactsTest = [
   const ContactModel(
@@ -49,13 +49,15 @@ List<ContactModel> contactsTest = [
 List<MessageModel> messagesTest = [
   MessageModel(
       id: "1",
-      content: "Message de Mohamed",
+      content:
+          "Message de Mohamed On sait depuis longtemps que travailler avec du texte lisible et contenant du sens est source de distractions, et empêche de se concentrer sur la mise en page elle-même. L'avantage du Lorem Ipsum sur un texte générique comme 'Du texte. Du texte. Du texte.' est qu'il possède une distribution de lettres plus ou moins normale, et en tout cas comparable avec celle du français standard. De nombreuses suites logicielles de mise en page ou éditeurs de sites Web ont fait du Lorem Ipsum leur faux texte par défaut, et une recherche pour 'Lorem Ipsum' vous conduira vers de nombreux sites qui n'en sont encore qu'à leur phase de construction. Plusieurs versions sont apparues avec le temps, parfois par accident, souvent intentionnellement (histoire d'y rajouter de petits clins d'oeil, voire des phrases embarassantes).",
       date: DateTime.now(),
       from: "1",
       to: "2"),
   MessageModel(
       id: "2",
-      content: "Message de Patrick",
+      content:
+          "Message de Patrickc On sait depuis longtemps que travailler avec du texte lisible et contenant du sens est source de distractions, et empêche de se concentrer sur la mise en page elle-même. L'avantage du Lorem Ipsum sur un texte générique comme 'Du texte. Du texte. Du texte.' est qu'il possède une distribution de lettres plus ou moins normale, et en tout cas comparable avec celle du français standard. De nombreuses suites logicielles de mise en page ou éditeurs de sites Web ont fait du Lorem Ipsum leur faux texte par défaut, et une recherche pour 'Lorem Ipsum' vous conduira vers de nombreux sites qui n'en sont encore qu'à leur phase de construction. Plusieurs versions sont apparues avec le temps, parfois par accident, souvent intentionnellement (histoire d'y rajouter de petits clins d'oeil, voire des phrases embarassantes).",
       date: DateTime.now(),
       from: "2",
       to: "1"),
@@ -96,6 +98,12 @@ class MessagePage extends StatelessWidget {
       child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
+            toolbarHeight: 80,
+            title: BlocBuilder<ContactBloc, ContactState>( //ContactBloc => MessageBloc
+              builder: (context, state) {
+                return MessageHeaderWidget(profile: contactsTest.firstWhere((e) => contactId == e.id).profile,);
+              },
+            ),
             backgroundColor: Colors.white,
             leading: Builder(
               builder: (context) {
@@ -108,53 +116,10 @@ class MessagePage extends StatelessWidget {
               },
             ),
           ),
-          drawer: Drawer(
-            child: BlocBuilder<ContactBloc, ContactState>(
-              builder: (context, state) {
-                List<ContactModel> contacts = state.contacts.toList();
-                return Column(
-                  children: [
-                    const DrawerHeader(
-                        padding: EdgeInsets.only(top: 50),
-                        child: Text("Y O U R   C O N T A C T S")),
-                    Expanded(
-                      child: ListView.builder(
-                          itemCount: contactsTest.length,
-                          padding: const EdgeInsets.only(left: 30),
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              iconColor: Colors.deepOrange,
-                              trailing: const Icon(Icons.message),
-                              title: Text(contactsTest[index].name),
-                              subtitle: Text(contactsTest[index].role.name),
-                            );
-                          }),
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
-          body: BlocBuilder<ContactBloc, ContactState>(
+          drawer: MessageDrawerWidget(userId: contactId, contacts: contactsTest,),
+          body: BlocBuilder<ContactBloc, ContactState>( //ContactBloc => MessageBloc
             builder: (context, state) {
-              return Center(
-                child: Container(
-                  decoration: const BoxDecoration(color: Colors.purpleAccent),
-                  width: 500,
-                  child: ListView.builder(
-                      itemCount: messagesTest.length,
-                      itemBuilder: (context, index) {
-                        return Row(
-                          mainAxisAlignment: messagesTest[index].from == "3"
-                              ? MainAxisAlignment.end
-                              : MainAxisAlignment.start,
-                          children: [
-                            Text(messagesTest[index].content),
-                          ],
-                        );
-                      }),
-                ),
-              );
+              return MessageListWidget(messages: messagesTest, contactId: contactId);
             },
           )),
     );

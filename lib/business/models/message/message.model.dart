@@ -1,4 +1,3 @@
-import 'package:contact_message_app/business/models/contact/contact.model.dart';
 
 class MessageModel {
   final String id;
