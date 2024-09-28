@@ -1,16 +1,20 @@
-import 'package:contact_message_app/business/bloc/contact/contact_bloc.dart';
-import 'package:contact_message_app/business/repository/contact_repository_impl.dart';
-import 'package:contact_message_app/data/provider/contact_data_provider_impl.dart';
-import 'package:contact_message_app/presentation/pages/home_page/home_page.dart';
+import 'package:contact_message_app/business/bloc/contact/contact.bloc.dart';
+import 'package:contact_message_app/business/repository/contact.repository.impl.dart';
+import 'package:contact_message_app/data/provider/contact.data.provider.impl.dart';
 import 'package:flutter/material.dart';
 import 'package:contact_message_app/common/core/theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:contact_message_app/data/database/database_data.dart';
+import 'package:contact_message_app/data/database/database.data.dart';
+import 'package:contact_message_app/core/router/router.dart';
+import 'package:url_strategy/url_strategy.dart';
+import 'package:uuid/v4.dart';
 
 void main() {
+  setPathUrlStrategy();
   GetIt.instance.registerLazySingleton(() => Database());
   GetIt.instance.registerLazySingleton(() => ContactDataProviderImpl());
+  GetIt.instance.registerLazySingleton(() => const UuidV4());
   runApp(const MyApp());
 }
 
@@ -29,10 +33,10 @@ class MyApp extends StatelessWidget {
                 create: (context) =>
                     ContactBloc(context.read<ContactRepositoryImpl>()))
           ],
-          child: MaterialApp(
+          child: MaterialApp.router(
             theme: appTheme,
             debugShowCheckedModeBanner: false,
-            home: const SafeArea(child: HomePage()),
+            routerConfig: routes,
           ),
         ));
   }

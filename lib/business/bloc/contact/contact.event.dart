@@ -1,6 +1,6 @@
-import 'package:contact_message_app/business/models/contact/contact_enum.dart';
-import 'package:contact_message_app/business/models/contact/contact_model.dart';
-import 'package:contact_message_app/common/core/exception_error.dart';
+import 'package:contact_message_app/business/models/contact/contact.enum.dart';
+import 'package:contact_message_app/business/models/contact/contact.model.dart';
+import 'package:contact_message_app/common/core/exception.error.dart';
 
 sealed class ContactEvent {}
 
