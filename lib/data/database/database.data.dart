@@ -92,42 +92,50 @@ class Database {
   Future<List<ContactModel>> get contacts async {
     Random random = Random();
     int randomNumber = 0 + random.nextInt(10 - 0);
-    return Future.delayed(const Duration(milliseconds: 2500),
+    return Future.delayed(const Duration(milliseconds: 1000),
         () => randomNumber >= 2 ? _contacts : throw Exception("Erreur Test"));
-  } //
+  }
 
   Future<List<ContactModel>> get students async {
     Random random = Random();
     int randomNumber = 0 + random.nextInt(10 - 0);
     return Future.delayed(
-        const Duration(milliseconds: 2500),
+        const Duration(milliseconds: 1000),
         () => randomNumber >= 2
             ? _contacts.where((c) => c.role == ContactRole.student).toList()
             : throw Exception("Erreur Test"));
-  } //
+  }
 
   Future<List<ContactModel>> get developers async {
     Random random = Random();
     int randomNumber = 0 + random.nextInt(10 - 0);
     return Future.delayed(
-        const Duration(milliseconds: 2500),
+        const Duration(milliseconds: 1000),
         () => randomNumber >= 2
             ? _contacts.where((c) => c.role == ContactRole.developer).toList()
             : throw Exception("Erreur Test"));
-  } //
+  }
+
+  Future<ContactModel> getContactById(String userId) async {
+    Random random = Random();
+    int randomNumber = 0 + random.nextInt(10 - 0);
+
+    return Future.delayed(
+        const Duration(milliseconds: 0),
+            () => randomNumber >= 2
+            ? _contacts
+            .firstWhere((c) => userId == c.id)
+            : throw Exception("Erreur Test"));
+  }
 
   /// *   Message Data    **
 
   Future<List<MessageModel>> getMessagesByContactId(String contactId) async {
     Random random = Random();
     int randomNumber = 0 + random.nextInt(10 - 0);
-    if (kDebugMode) {
-      print(_messages
-          .where((m) => contactId == m.to || contactId == m.from)
-          .toList());
-    }
+
     return Future.delayed(
-        const Duration(milliseconds: 2500),
+        const Duration(milliseconds: 0),
         () => randomNumber >= 2
             ? _messages
                 .where((m) => contactId == m.to || contactId == m.from)

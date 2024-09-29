@@ -18,7 +18,7 @@ class MessagePage extends StatelessWidget {
           backgroundColor: Colors.white,
           appBar: AppBar(
             toolbarHeight: 80,
-            title: BlocBuilder<ContactBloc, ContactState>( //ContactBloc => MessageBloc
+            title: BlocBuilder<ContactBloc, ContactState>(
               builder: (context, state) {
                 return MessageHeaderWidget(profile: state.contacts.firstWhere((e) => contactId == e.id).profile,);
               },
