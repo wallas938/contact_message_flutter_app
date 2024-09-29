@@ -1,5 +1,5 @@
 import 'package:contact_message_app/business/models/message/message.model.dart';
-import 'package:contact_message_app/presentation/pages/home_page/widgets/message/message.item.widget.dart';
+import 'package:contact_message_app/presentation/pages/message_page/widgets/message/message.item.widget.dart';
 import 'package:flutter/material.dart';
 
 class MessageListWidget extends StatelessWidget {

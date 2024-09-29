@@ -1,7 +1,9 @@
+import 'package:contact_message_app/business/bloc/messages/message.bloc.dart';
+import 'package:contact_message_app/business/bloc/messages/message.event.dart';
 import 'package:contact_message_app/business/models/contact/contact.model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 class ContactItem extends StatelessWidget {
   final ContactModel contact;
 
@@ -14,6 +16,7 @@ class ContactItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
+        context.read<MessageBloc>().add(MessageGetAllByContactIdStartEvent(contactId: contact.id));
         context.go('/messages/${contact.id}');
       },
       leading: Container(

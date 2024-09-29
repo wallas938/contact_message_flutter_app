@@ -1,7 +1,7 @@
 import 'package:contact_message_app/business/models/contact/contact.enum.dart';
 import 'package:contact_message_app/business/models/contact/contact.model.dart';
 import 'package:contact_message_app/data/database/database.data.dart';
-import 'package:contact_message_app/data/provider/contact.data.provider.dart';
+import 'package:contact_message_app/data/provider/contact/contact.data.provider.dart';
 
 class ContactDataProviderImpl extends ContactDataProvider {
   @override
