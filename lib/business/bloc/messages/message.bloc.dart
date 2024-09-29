@@ -1,3 +1,4 @@
+import 'package:contact_message_app/business/bloc/contact/contact.event.dart';
 import 'package:contact_message_app/business/bloc/messages/message.event.dart';
 import 'package:contact_message_app/business/models/message/message.model.dart';
 import 'package:contact_message_app/business/repository/message/message/message.repository.dart';
@@ -53,7 +54,6 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
         add(MessageGetAllByContactIdFailedEvent(errorRequestException: error));
       }
     });
-
     on<MessageGetAllByContactIdSuccessEvent>((event, emit) async {
       emit(state.copyWith(messages: event.messages, loading: false));
     });

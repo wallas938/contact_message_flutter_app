@@ -15,4 +15,9 @@ class ContactDataProviderImpl extends ContactDataProvider {
         ? await Database().students
         : await Database().developers;
   }
+
+  @override
+  Future<ContactModel> getContactById(String userId) async {
+    return await Database().getContactById(userId);
+  }
 }

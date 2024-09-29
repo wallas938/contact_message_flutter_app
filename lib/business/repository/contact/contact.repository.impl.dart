@@ -20,4 +20,9 @@ class ContactRepositoryImpl extends ContactRepository {
   Future<List<ContactModel>> getContactsByRole(ContactRole role) async {
     return await contactDataProvider.getContactsByRole(role);
   }
+
+  @override
+  Future<ContactModel> getContactById(String contactId) async {
+    return await contactDataProvider.getContactById(contactId);
+  }
 }
