@@ -1,6 +1,9 @@
 import 'package:contact_message_app/business/bloc/contact/contact.bloc.dart';
-import 'package:contact_message_app/business/repository/contact.repository.impl.dart';
-import 'package:contact_message_app/data/provider/contact.data.provider.impl.dart';
+import 'package:contact_message_app/business/bloc/messages/message.bloc.dart';
+import 'package:contact_message_app/business/repository/contact/contact.repository.impl.dart';
+import 'package:contact_message_app/business/repository/message/message/message.repository.impl.dart';
+import 'package:contact_message_app/data/provider/contact/contact.data.provider.impl.dart';
+import 'package:contact_message_app/data/provider/message/message/message.data.provider.impl.dart';
 import 'package:flutter/material.dart';
 import 'package:contact_message_app/common/core/theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +17,7 @@ void main() {
   setPathUrlStrategy();
   GetIt.instance.registerLazySingleton(() => Database());
   GetIt.instance.registerLazySingleton(() => ContactDataProviderImpl());
+  GetIt.instance.registerLazySingleton(() => MessageDataProviderImpl());
   GetIt.instance.registerLazySingleton(() => const UuidV4());
   runApp(const MyApp());
 }
@@ -26,12 +30,16 @@ class MyApp extends StatelessWidget {
     return MultiRepositoryProvider(
         providers: [
           RepositoryProvider(create: (context) => ContactRepositoryImpl()),
+          RepositoryProvider(create: (context) => MessageRepositoryImpl()),
         ],
         child: MultiBlocProvider(
           providers: [
             BlocProvider(
                 create: (context) =>
-                    ContactBloc(context.read<ContactRepositoryImpl>()))
+                    ContactBloc(context.read<ContactRepositoryImpl>())),
+            BlocProvider(
+                create: (context) =>
+                    MessageBloc(context.read<MessageRepositoryImpl>())),
           ],
           child: MaterialApp.router(
             theme: appTheme,

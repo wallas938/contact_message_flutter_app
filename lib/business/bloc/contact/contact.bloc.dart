@@ -1,6 +1,6 @@
 import 'package:contact_message_app/business/bloc/contact/contact.event.dart';
 import 'package:contact_message_app/business/models/contact/contact.model.dart';
-import 'package:contact_message_app/business/repository/contact.repository.dart';
+import 'package:contact_message_app/business/repository/contact/contact.repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:contact_message_app/common/core/exception.error.dart';
