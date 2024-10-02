@@ -1,4 +1,5 @@
 import 'package:contact_message_app/business/bloc/contact/contact.event.dart';
+import 'package:contact_message_app/business/models/contact/contact.enum.dart';
 import 'package:contact_message_app/business/models/contact/contact.model.dart';
 import 'package:contact_message_app/business/repository/contact/contact.repository.dart';
 import 'package:equatable/equatable.dart';
@@ -8,25 +9,38 @@ import 'package:contact_message_app/common/core/exception.error.dart';
 
 class ContactState extends Equatable {
   final List<ContactModel> contacts;
+  final ContactRole contactRole;
   final ContactModel? currentUser;
   final ContactModel? receiver;
   final bool loading;
   final ErrorRequestException exception;
 
-  const ContactState({required this.currentUser,
-    required this.receiver,
-    required this.contacts,
-    required this.loading,
-    required this.exception});
+  const ContactState(
+      {required this.currentUser,
+      required this.contactRole,
+      required this.receiver,
+      required this.contacts,
+      required this.loading,
+      required this.exception});
 
-  ContactState copyWith({
-    ContactModel? currentUser,
-    ContactModel? receiver,
-    List<ContactModel>? contacts,
-    bool? loading,
-    ErrorRequestException? exception}) {
+  ContactState.initialState()
+      : loading = false,
+        exception = ErrorRequestException.initialState(),
+        contactRole = ContactRole.contact,
+        contacts = [],
+        receiver = null,
+        currentUser = null;
+
+  ContactState copyWith(
+      {ContactModel? currentUser,
+      ContactModel? receiver,
+      ContactRole? contactRole,
+      List<ContactModel>? contacts,
+      bool? loading,
+      ErrorRequestException? exception}) {
     return ContactState(
         currentUser: currentUser ?? this.currentUser,
+        contactRole: contactRole ?? this.contactRole,
         receiver: receiver ?? this.receiver,
         contacts: contacts ?? this.contacts,
         loading: loading ?? this.loading,
@@ -38,22 +52,26 @@ class ContactState extends Equatable {
   List<Object?> get props => [contacts, loading, exception, currentUser];
 }
 
-const ContactState initialState = ContactState(
-    currentUser: null,
-    receiver: null,
-    contacts: [],
-    loading: false,
-    exception: ErrorRequestException(errorMessage: "", hasError: false));
+class ContactConversationPair extends Equatable {
+  final String from;
+  final String to;
+
+  const ContactConversationPair({required this.from, required this.to});
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [from, to];
+}
 
 class ContactBloc extends Bloc<ContactEvent, ContactState> {
   final ContactRepository contactRepository;
 
-  ContactBloc(this.contactRepository) : super(initialState) {
+  ContactBloc(this.contactRepository) : super(ContactState.initialState()) {
     /* ------------- CONTACTS ---------------*/
 
     on<ContactGetAllStartEvent>((event, emit) async {
-      const error = ErrorRequestException(errorMessage: "", hasError: false);
-      emit(state.copyWith(loading: true, exception: error));
+      emit(state.copyWith(
+          loading: true, exception: ErrorRequestException.initialState()));
       try {
         List<ContactModel> payload = await contactRepository.getAllContacts();
         add(ContactGetAllSuccessEvent(contacts: payload));
@@ -75,24 +93,24 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
 
     /* ------------- CURRENT USER ---------------*/
 
-    on<ContactGetCurrentUserStartEvent>((event, emit) async {
-      const error = ErrorRequestException(errorMessage: "", hasError: false);
-      emit(state.copyWith(loading: true, exception: error));
+    on<ContactSetCurrentUserStartEvent>((event, emit) async {
+      emit(state.copyWith(
+          loading: true, exception: ErrorRequestException.initialState()));
       try {
-        ContactModel payload = await contactRepository.getContactById(
-            event.userId);
-        add(ContactGetCurrentUserSuccessEvent(currentUser: payload));
+        ContactModel payload =
+            await contactRepository.getContactById(event.userId);
+        add(ContactSetCurrentUserSuccessEvent(currentUser: payload));
       } on Exception {
         const error = ErrorRequestException(
             errorMessage: "Erreur lors du chargement du destinataire",
             hasError: true);
-        add(ContactGetCurrentUserFailedEvent(errorRequestException: error));
+        add(ContactSetCurrentUserFailedEvent(errorRequestException: error));
       }
     });
-    on<ContactGetCurrentUserSuccessEvent>((event, emit) async {
-      emit(state.copyWith(receiver: event.currentUser, loading: false));
+    on<ContactSetCurrentUserSuccessEvent>((event, emit) async {
+      emit(state.copyWith(currentUser: event.currentUser, loading: false));
     });
-    on<ContactGetCurrentUserFailedEvent>((event, emit) async {
+    on<ContactSetCurrentUserFailedEvent>((event, emit) async {
       emit(
         state.copyWith(loading: false, exception: event.errorRequestException),
       );
@@ -101,20 +119,21 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     /* ------------- SET CURRENT RECEIVER BY ID---------------*/
 
     on<ContactSetCurrentReceiverByIdStartEvent>((event, emit) async {
-      const error = ErrorRequestException(errorMessage: "", hasError: false);
-      emit(state.copyWith(loading: true, exception: error));
+      emit(state.copyWith(
+          loading: true, exception: ErrorRequestException.initialState()));
       try {
         ContactModel payload =
-        await contactRepository.getContactById(event.receiverId);
+            await contactRepository.getContactById(event.receiverId);
         if (kDebugMode) {
-          print(payload);
+          print("Current Receiver: $payload");
         }
         add(ContactSetCurrentReceiverByIdSuccessEvent(receiver: payload));
       } on Exception {
         const error = ErrorRequestException(
             errorMessage: "Erreur lors du chargement des contacts par rôle",
             hasError: true);
-        add(ContactSetCurrentReceiverByIdFailedEvent(errorRequestException: error));
+        add(ContactSetCurrentReceiverByIdFailedEvent(
+            errorRequestException: error));
       }
     });
     on<ContactSetCurrentReceiverByIdSuccessEvent>((event, emit) async {
@@ -129,12 +148,12 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     /* ------------- GET CONTACTS BY ROLE---------------*/
 
     on<ContactGetByRoleStartEvent>((event, emit) async {
-      const error = ErrorRequestException(errorMessage: "", hasError: false);
-      emit(state.copyWith(loading: true, exception: error));
+      emit(state.copyWith(
+          loading: true, exception: ErrorRequestException.initialState()));
       try {
-        List<ContactModel> payload =
-        await contactRepository.getContactsByRole(event.role);
-        add(ContactGetByRoleSuccessEvent(contacts: payload));
+        // List<ContactModel> payload =
+        //     await contactRepository.getContactsByRole(event.role);
+        add(ContactGetByRoleSuccessEvent(role: event.role));
       } on Exception {
         const error = ErrorRequestException(
             errorMessage: "Erreur lors du chargement des contacts par rôle",
@@ -143,7 +162,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       }
     });
     on<ContactGetByRoleSuccessEvent>((event, emit) async {
-      emit(state.copyWith(contacts: event.contacts, loading: false));
+      emit(state.copyWith(contactRole: event.role, loading: false));
     });
     on<ContactGetByRoleFailedEvent>((event, emit) async {
       emit(

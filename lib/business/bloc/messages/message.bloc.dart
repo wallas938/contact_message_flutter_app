@@ -1,9 +1,9 @@
-import 'package:contact_message_app/business/bloc/contact/contact.event.dart';
 import 'package:contact_message_app/business/bloc/messages/message.event.dart';
 import 'package:contact_message_app/business/models/message/message.model.dart';
 import 'package:contact_message_app/business/repository/message/message/message.repository.dart';
 import 'package:contact_message_app/common/core/exception.error.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MessageState extends Equatable {
@@ -29,10 +29,10 @@ class MessageState extends Equatable {
   List<Object?> get props => [messages, loading, exception];
 }
 
-const MessageState initialState = MessageState(
-    messages: [],
+MessageState initialState = MessageState(
+    messages: const [],
     loading: false,
-    exception: ErrorRequestException(errorMessage: "", hasError: false));
+    exception: ErrorRequestException.initialState());
 
 class MessageBloc extends Bloc<MessageEvent, MessageState> {
   final MessageRepository messageRepository;
@@ -40,24 +40,27 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
   MessageBloc(this.messageRepository) : super(initialState) {
     /* ------------- GET ALL MESSAGES BY CONTACT ID ---------------*/
 
-    on<MessageGetAllByContactIdStartEvent>((event, emit) async {
-      const error = ErrorRequestException(errorMessage: "", hasError: false);
-      emit(state.copyWith(loading: true, exception: error));
+    on<MessageGetThreadStartEvent>((event, emit) async {
+      emit(state.copyWith(
+          loading: true, exception: ErrorRequestException.initialState()));
       try {
         List<MessageModel> payload =
-            await messageRepository.getAllMessagesByContactId(event.contactId);
-        add(MessageGetAllByContactIdSuccessEvent(messages: payload));
+            await messageRepository.getConversation(event.conversationData);
+        add(MessageGetThreadSuccessEvent(messages: payload));
       } on Exception {
         const error = ErrorRequestException(
             errorMessage: "Erreur lors du chargement des messages",
             hasError: true);
-        add(MessageGetAllByContactIdFailedEvent(errorRequestException: error));
+        add(MessageGetThreadFailedEvent(errorRequestException: error));
       }
     });
-    on<MessageGetAllByContactIdSuccessEvent>((event, emit) async {
+    on<MessageGetThreadSuccessEvent>((event, emit) async {
+      if (kDebugMode) {
+        print("Current Receiver: ${event.messages}");
+      }
       emit(state.copyWith(messages: event.messages, loading: false));
     });
-    on<MessageGetAllByContactIdFailedEvent>((event, emit) async {
+    on<MessageGetThreadFailedEvent>((event, emit) async {
       emit(
         state.copyWith(loading: false, exception: event.errorRequestException),
       );

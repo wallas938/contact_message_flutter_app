@@ -1,5 +1,7 @@
 import 'package:contact_message_app/business/bloc/contact/contact.bloc.dart';
-import 'package:contact_message_app/presentation/pages/home_page/widgets/contact/contat_list.dart';
+import 'package:contact_message_app/business/bloc/contact/contact.event.dart';
+import 'package:contact_message_app/business/models/contact/contact.enum.dart';
+import 'package:contact_message_app/presentation/pages/home_page/widgets/contact/contact_list.dart';
 import 'package:contact_message_app/presentation/pages/home_page/widgets/menu/menu_button_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +11,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<ContactBloc>().add(ContactGetAllStartEvent());
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -39,7 +43,12 @@ class HomePage extends StatelessWidget {
                   return Center(child: Text(state.exception.errorMessage));
                 }
 
-                return ContactList(contacts: state.contacts);
+                return ContactList(
+                    contacts: state.contactRole == ContactRole.contact
+                        ? state.contacts
+                        : state.contacts
+                            .where((c) => c.role == state.contactRole)
+                            .toList());
               },
             ))
           ],

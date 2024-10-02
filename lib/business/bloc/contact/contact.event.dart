@@ -31,9 +31,9 @@ class ContactGetByRoleStartEvent extends ContactEvent {
 }
 
 class ContactGetByRoleSuccessEvent extends ContactEvent {
-  final List<ContactModel> contacts;
+  final ContactRole role;
 
-  ContactGetByRoleSuccessEvent({required this.contacts});
+  ContactGetByRoleSuccessEvent({required this.role});
 }
 
 class ContactGetByRoleFailedEvent extends ContactEvent {
@@ -44,22 +44,22 @@ class ContactGetByRoleFailedEvent extends ContactEvent {
 
 /// GET CURRENT USER
 
-class ContactGetCurrentUserStartEvent extends ContactEvent {
+class ContactSetCurrentUserStartEvent extends ContactEvent {
   final String userId;
 
-  ContactGetCurrentUserStartEvent({required this.userId});
+  ContactSetCurrentUserStartEvent({required this.userId});
 }
 
-class ContactGetCurrentUserSuccessEvent extends ContactEvent {
+class ContactSetCurrentUserSuccessEvent extends ContactEvent {
   final ContactModel currentUser;
 
-  ContactGetCurrentUserSuccessEvent({required this.currentUser});
+  ContactSetCurrentUserSuccessEvent({required this.currentUser});
 }
 
-class ContactGetCurrentUserFailedEvent extends ContactEvent {
+class ContactSetCurrentUserFailedEvent extends ContactEvent {
   final ErrorRequestException errorRequestException;
 
-  ContactGetCurrentUserFailedEvent({required this.errorRequestException});
+  ContactSetCurrentUserFailedEvent({required this.errorRequestException});
 }
 
 /*  SET MESSAGE RECEIVER  */
