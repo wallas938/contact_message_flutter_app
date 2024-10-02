@@ -1,5 +1,4 @@
 import 'package:contact_message_app/business/models/message/message.model.dart';
-import 'package:contact_message_app/common/mixin/user.identifier.mixin.dart';
 import 'package:flutter/material.dart';
 
 class MessageItemWidget extends StatelessWidget {

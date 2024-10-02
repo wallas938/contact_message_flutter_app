@@ -1,1 +1,1 @@
-enum ContactRole { student, developer }
+enum ContactRole { contact, student, developer }

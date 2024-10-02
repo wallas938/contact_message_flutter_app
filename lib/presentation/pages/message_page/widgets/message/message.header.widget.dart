@@ -9,7 +9,10 @@ class MessageHeaderWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text(profile, style: const TextStyle(color: Colors.redAccent),)
+        Padding(
+          padding: const EdgeInsets.only(right: 18.0),
+          child: Text(profile, style: const TextStyle(color: Colors.redAccent),),
+        )
       ],
     );
   }

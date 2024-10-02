@@ -8,4 +8,8 @@ class MessageModel {
 
   MessageModel({required this.id, required this.content, required this.date, required this.from, required this.to});
 
+  @override
+  String toString() {
+    return "id => $id; content => $content; date => $date; from => $from; to => $to;";
+  }
 }

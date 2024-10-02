@@ -1,5 +1,8 @@
 import 'package:contact_message_app/business/bloc/contact/contact.bloc.dart';
+import 'package:contact_message_app/business/bloc/contact/contact.event.dart';
 import 'package:contact_message_app/business/bloc/messages/message.bloc.dart';
+import 'package:contact_message_app/business/bloc/messages/message.event.dart';
+import 'package:contact_message_app/business/models/contact/contact.model.dart';
 import 'package:contact_message_app/presentation/pages/message_page/widgets/message/message.drawer.widget.dart';
 import 'package:contact_message_app/presentation/pages/message_page/widgets/message/message.header.widget.dart';
 import 'package:contact_message_app/presentation/pages/message_page/widgets/message/message.list.widget.dart';
@@ -13,6 +16,9 @@ class MessagePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<MessageBloc>().add(MessageGetThreadStartEvent(
+        conversationData: ContactConversationPair(from: contactId, to: "1")));
+
     return SafeArea(
       child: Scaffold(
           backgroundColor: Colors.white,
@@ -20,7 +26,11 @@ class MessagePage extends StatelessWidget {
             toolbarHeight: 80,
             title: BlocBuilder<ContactBloc, ContactState>(
               builder: (context, state) {
-                return MessageHeaderWidget(profile: state.contacts.firstWhere((e) => contactId == e.id).profile,);
+                return MessageHeaderWidget(
+                  profile: state.contacts
+                      .firstWhere((e) => contactId == e.id)
+                      .profile,
+                );
               },
             ),
             backgroundColor: Colors.white,
@@ -37,7 +47,13 @@ class MessagePage extends StatelessWidget {
           ),
           drawer: BlocBuilder<ContactBloc, ContactState>(
             builder: (context, state) {
-              return MessageDrawerWidget(userId: contactId, contacts: state.contacts,);
+              List<ContactModel> receivers = state.contacts
+                  .where((contact) => contact.id != contactId)
+                  .toList();
+              return MessageDrawerWidget(
+                userId: contactId,
+                receivers: receivers,
+              );
             },
           ),
           body: BlocBuilder<MessageBloc, MessageState>(
@@ -49,7 +65,8 @@ class MessagePage extends StatelessWidget {
               if (state.exception.hasError) {
                 return Center(child: Text(state.exception.errorMessage));
               }
-              return MessageListWidget(messages: state.messages, contactId: contactId);
+              return MessageListWidget(
+                  messages: state.messages, contactId: contactId);
             },
           )),
     );

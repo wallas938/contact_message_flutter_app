@@ -1,22 +1,25 @@
+import 'package:contact_message_app/business/bloc/contact/contact.bloc.dart';
 import 'package:contact_message_app/business/models/message/message.model.dart';
 import 'package:contact_message_app/common/core/exception.error.dart';
 
 sealed class MessageEvent {}
 
-class MessageGetAllByContactIdStartEvent extends MessageEvent {
-  final String contactId;
+/// *  GET ALL MESSAGES BY CONTACT ID **
 
-  MessageGetAllByContactIdStartEvent({required this.contactId});
+class MessageGetThreadStartEvent extends MessageEvent {
+  final ContactConversationPair conversationData;
+
+  MessageGetThreadStartEvent({required this.conversationData});
 }
 
-class MessageGetAllByContactIdSuccessEvent extends MessageEvent {
+class MessageGetThreadSuccessEvent extends MessageEvent {
   final List<MessageModel> messages;
 
-  MessageGetAllByContactIdSuccessEvent({required this.messages});
+  MessageGetThreadSuccessEvent({required this.messages});
 }
 
-class MessageGetAllByContactIdFailedEvent extends MessageEvent {
+class MessageGetThreadFailedEvent extends MessageEvent {
   final ErrorRequestException errorRequestException;
 
-  MessageGetAllByContactIdFailedEvent({required this.errorRequestException});
+  MessageGetThreadFailedEvent({required this.errorRequestException});
 }
