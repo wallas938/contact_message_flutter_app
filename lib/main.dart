@@ -2,6 +2,7 @@ import 'package:contact_message_app/business/bloc/contact/contact.bloc.dart';
 import 'package:contact_message_app/business/bloc/messages/message.bloc.dart';
 import 'package:contact_message_app/business/repository/contact/contact.repository.impl.dart';
 import 'package:contact_message_app/business/repository/message/message/message.repository.impl.dart';
+import 'package:contact_message_app/core/router/router.bloc.dart';
 import 'package:contact_message_app/data/provider/contact/contact.data.provider.impl.dart';
 import 'package:contact_message_app/data/provider/message/message/message.data.provider.impl.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
             BlocProvider(
                 create: (context) =>
                     MessageBloc(context.read<MessageRepositoryImpl>())),
+            BlocProvider(create: (context) => MyRouterBloc()),
           ],
           child: MaterialApp.router(
             theme: appTheme,

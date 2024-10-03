@@ -1,6 +1,7 @@
 import 'package:contact_message_app/business/bloc/contact/contact.bloc.dart';
 import 'package:contact_message_app/business/bloc/contact/contact.event.dart';
 import 'package:contact_message_app/business/models/contact/contact.enum.dart';
+import 'package:contact_message_app/core/router/router.bloc.dart';
 import 'package:contact_message_app/presentation/pages/home_page/widgets/contact/contact_list.dart';
 import 'package:contact_message_app/presentation/pages/home_page/widgets/menu/menu_button_list.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<ContactBloc>().add(ContactGetAllStartEvent());
+    context.read<MyRouterBloc>().add(RouterSetAuthorization(authorization: true));
 
     return Scaffold(
       appBar: AppBar(

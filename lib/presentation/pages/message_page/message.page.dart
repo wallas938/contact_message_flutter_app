@@ -1,5 +1,4 @@
 import 'package:contact_message_app/business/bloc/contact/contact.bloc.dart';
-import 'package:contact_message_app/business/bloc/contact/contact.event.dart';
 import 'package:contact_message_app/business/bloc/messages/message.bloc.dart';
 import 'package:contact_message_app/business/bloc/messages/message.event.dart';
 import 'package:contact_message_app/business/models/contact/contact.model.dart';
