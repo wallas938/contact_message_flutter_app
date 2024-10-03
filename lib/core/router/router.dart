@@ -1,7 +1,10 @@
+import 'package:contact_message_app/core/router/router.bloc.dart';
 import 'package:contact_message_app/presentation/pages/home_page/home.page.dart';
 import 'package:contact_message_app/presentation/pages/message_page/message.page.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 // GoRouter configuration
 final routes = GoRouter(
@@ -18,7 +21,7 @@ final routes = GoRouter(
       name: 'messages',
       path: '/messages/:contactId',
       builder: (context, state) {
-        if(state.pathParameters["contactId"]!= null) {
+        if (state.pathParameters["contactId"] != null) {
           String contactId = state.pathParameters["contactId"] as String;
           return MessagePage(contactId: contactId);
         }
@@ -26,4 +29,16 @@ final routes = GoRouter(
       },
     ),
   ],
+  redirect: (context, state) {
+    final isAuthorized = context.read<MyRouterBloc>().state.isAuthorized;
+    if (kDebugMode) {
+      print(state.fullPath);
+    }
+    // Si l'utilisateur essaie d'accéder à /protected sans être autorisé
+    if (!isAuthorized) {
+      return '/home'; // Redirige vers l'accueil
+    }
+
+    return null; // Pas de redirection
+  },
 );
