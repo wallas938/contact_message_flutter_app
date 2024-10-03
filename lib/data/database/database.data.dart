@@ -186,7 +186,7 @@ class Database {
 
     return Future.delayed(
         const Duration(milliseconds: 0),
-        () => randomNumber >= 2
+        () => randomNumber >= 0
             ? _messages
                 .where((m) =>
                     (conversationData.from == m.from ||
