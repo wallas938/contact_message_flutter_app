@@ -3,7 +3,6 @@ import 'package:contact_message_app/business/models/message/message.model.dart';
 import 'package:contact_message_app/business/repository/message/message/message.repository.dart';
 import 'package:contact_message_app/common/core/exception.error.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MessageState extends Equatable {
@@ -55,9 +54,9 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
       }
     });
     on<MessageGetThreadSuccessEvent>((event, emit) async {
-      if (kDebugMode) {
-        print("Current Receiver: ${event.messages}");
-      }
+      // if (kDebugMode) {
+      //   print("Current Receiver: ${event.messages}");
+      // }
       emit(state.copyWith(messages: event.messages, loading: false));
     });
     on<MessageGetThreadFailedEvent>((event, emit) async {
