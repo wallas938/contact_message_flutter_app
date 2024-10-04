@@ -6,6 +6,7 @@ import 'package:contact_message_app/business/models/contact/contact.model.dart';
 import 'package:contact_message_app/common/mixin/user.identifier.mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class MessageDrawerWidget extends StatelessWidget with UserIdentifierMixin {
   final List<ContactModel> receivers;
@@ -23,9 +24,28 @@ class MessageDrawerWidget extends StatelessWidget with UserIdentifierMixin {
     return Drawer(
       child: Column(
         children: [
-          const DrawerHeader(
-              padding: EdgeInsets.only(top: 50),
-              child: Text("Y O U R   C O N T A C T S")),
+          DrawerHeader(
+              padding: const EdgeInsets.only(top: 50),
+              child: Column(
+                children: [
+                  const Text("Y O U R   C O N T A C T S"),
+                  const SizedBox(height: 30,),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 30.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: TextButton(
+                          onPressed: () {
+                            Scaffold.of(context).closeDrawer();
+                          },
+                          child: const Icon(
+                            Icons.arrow_back,
+                            color: Colors.redAccent,
+                          )),
+                    ),
+                  )
+                ],
+              )),
           Expanded(
             child: ListView.builder(
                 itemCount: receivers.length,

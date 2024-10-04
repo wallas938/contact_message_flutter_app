@@ -17,8 +17,9 @@ class ContactItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<ContactBloc, ContactState>(
       listener: (context, state) {
-        if (state.currentUser?.id == contact.id) {
-          context.go('/messages/${state.currentUser?.id}');
+        print(state.currentUser?.id);
+        if (state.currentUser?.id == contact.id) { // Corriger ici
+          GoRouter.of(context).go('/messages/${state.currentUser?.id}');
         }
       },
       builder: (context, state) {

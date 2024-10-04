@@ -13,4 +13,9 @@ class MessageRepositoryImpl extends MessageRepository {
   Future<List<MessageModel>> getConversation(ContactConversationPair conversationData) async {
       return await messageDataProvider.getConversation(conversationData);
     }
+
+  @override
+  Future<MessageModel> postMessage(MessageModel message) async {
+    return await messageDataProvider.postMessage(message);
+  }
   }

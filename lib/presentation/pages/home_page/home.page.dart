@@ -12,7 +12,9 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     context.read<ContactBloc>().add(ContactGetAllStartEvent());
+
     context.read<MyRouterBloc>().add(RouterSetAuthorization(authorization: true));
 
     return Scaffold(

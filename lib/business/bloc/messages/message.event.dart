@@ -23,3 +23,23 @@ class MessageGetThreadFailedEvent extends MessageEvent {
 
   MessageGetThreadFailedEvent({required this.errorRequestException});
 }
+
+/// *  POST A MESSAGE
+
+class MessagePostMessageStartEvent extends MessageEvent {
+  MessageModel message;
+
+  MessagePostMessageStartEvent({required this.message});
+}
+
+class MessagePostMessageSuccessEvent extends MessageEvent {
+  MessageModel message;
+
+  MessagePostMessageSuccessEvent({required this.message});
+}
+
+class MessagePostMessageFailedEvent extends MessageEvent {
+  final ErrorRequestException errorRequestException;
+
+  MessagePostMessageFailedEvent({required this.errorRequestException});
+}

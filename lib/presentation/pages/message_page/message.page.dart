@@ -7,6 +7,7 @@ import 'package:contact_message_app/presentation/pages/message_page/widgets/mess
 import 'package:contact_message_app/presentation/pages/message_page/widgets/message/message.list.widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class MessagePage extends StatelessWidget {
   final String contactId;
@@ -15,9 +16,6 @@ class MessagePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<MessageBloc>().add(MessageGetThreadStartEvent(
-        conversationData: ContactConversationPair(from: contactId, to: "1")));
-
     return SafeArea(
       child: Scaffold(
           backgroundColor: Colors.white,
@@ -32,6 +30,17 @@ class MessagePage extends StatelessWidget {
                 );
               },
             ),
+            actions: [
+              IconButton(
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.blue,
+                ),
+                onPressed: () {
+                  GoRouter.of(context).go("/home");
+                },
+              )
+            ],
             backgroundColor: Colors.white,
             leading: Builder(
               builder: (context) {
@@ -44,7 +53,7 @@ class MessagePage extends StatelessWidget {
               },
             ),
           ),
-          drawer: BlocBuilder<ContactBloc, ContactState>(
+          drawer: BlocConsumer<ContactBloc, ContactState>(
             builder: (context, state) {
               List<ContactModel> receivers = state.contacts
                   .where((contact) => contact.id != contactId)
@@ -53,6 +62,13 @@ class MessagePage extends StatelessWidget {
                 userId: contactId,
                 receivers: receivers,
               );
+            },
+            listener: (context, state) {
+              if (state.receiver == null) {
+                context.read<MessageBloc>().add(MessageGetThreadStartEvent(
+                    conversationData:
+                        ContactConversationPair(from: contactId, to: "1")));
+              }
             },
           ),
           body: BlocBuilder<MessageBloc, MessageState>(
