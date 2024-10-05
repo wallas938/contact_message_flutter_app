@@ -6,9 +6,11 @@ import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 // GoRouter configuration
 final routes = GoRouter(
   initialLocation: '/home',
+  navigatorKey: _rootNavigatorKey,
   // initialLocation: '/messages/1',
   routes: [
     GoRoute(
@@ -27,18 +29,22 @@ final routes = GoRouter(
         }
         return const SafeArea(child: HomePage());
       },
+      redirect: (context, state) {
+        final isAuthorized = context.read<MyRouterBloc>().state.isAuthorized;
+
+        if (kDebugMode) {
+          print(state.path);
+        }
+
+        if (kDebugMode) {
+          print("User is Authorized: $isAuthorized");
+        }
+
+        if (!isAuthorized) {
+          return '/home';
+        }
+        return null;
+      },
     ),
   ],
-  redirect: (context, state) {
-    final isAuthorized = context.read<MyRouterBloc>().state.isAuthorized;
-    if (kDebugMode) {
-      print(state.fullPath);
-    }
-    // Si l'utilisateur essaie d'accéder à /protected sans être autorisé
-    if (!isAuthorized) {
-      return '/home'; // Redirige vers l'accueil
-    }
-
-    return null; // Pas de redirection
-  },
 );

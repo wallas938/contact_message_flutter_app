@@ -139,7 +139,6 @@ class Database {
         to: "9"),
   ];
 
-
   Future<List<ContactModel>> get contacts async {
     Random random = Random();
     int randomNumber = 0 + random.nextInt(10 - 0);
@@ -195,5 +194,18 @@ class Database {
                         conversationData.to == m.to))
                 .toList()
             : throw Exception("Erreur Test"));
+  }
+
+  Future<MessageModel> postMessage(MessageModel message) async {
+    Random random = Random();
+    int randomNumber = 0 + random.nextInt(10 - 0);
+
+    await Future.delayed(
+        const Duration(milliseconds: 0),
+        () => randomNumber >= 0
+            ? _messages.add(message)
+            : throw Exception("Erreur Test"));
+
+    return message;
   }
 }

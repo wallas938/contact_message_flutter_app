@@ -9,4 +9,9 @@ class MessageDataProviderImpl extends MessageDataProvider {
   Future<List<MessageModel>> getConversation(ContactConversationPair conversationData) async {
     return GetIt.instance<Database>().getConversation(conversationData);
   }
+
+  @override
+  Future<MessageModel> postMessage(MessageModel message) async {
+    return await GetIt.instance<Database>().postMessage(message);
+  }
 }

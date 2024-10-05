@@ -1,3 +1,4 @@
+import 'package:contact_message_app/business/bloc/contact/contact.bloc.dart';
 import 'package:contact_message_app/business/bloc/messages/message.event.dart';
 import 'package:contact_message_app/business/models/message/message.model.dart';
 import 'package:contact_message_app/business/repository/message/message/message.repository.dart';
@@ -60,6 +61,34 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
       emit(state.copyWith(messages: event.messages, loading: false));
     });
     on<MessageGetThreadFailedEvent>((event, emit) async {
+      emit(
+        state.copyWith(loading: false, exception: event.errorRequestException),
+      );
+    });
+
+    /* ------------- GET ALL MESSAGES BY CONTACT ID ---------------*/
+
+    on<MessagePostMessageStartEvent>((event, emit) {
+      emit(state.copyWith(
+          loading: true, exception: ErrorRequestException.initialState()));
+      try {
+        messageRepository.postMessage(event.message);
+
+        add(MessagePostMessageSuccessEvent(message: event.message));
+      } on Exception {
+        const error = ErrorRequestException(
+            errorMessage: "Erreur lors du chargement des messages",
+            hasError: true);
+
+        add(MessagePostMessageFailedEvent(errorRequestException: error));
+      }
+    });
+    on<MessagePostMessageSuccessEvent>((event, emit) async {
+      add(MessageGetThreadStartEvent(
+          conversationData: ContactConversationPair(
+              from: event.message.from, to: event.message.to)));
+    });
+    on<MessagePostMessageFailedEvent>((event, emit) async {
       emit(
         state.copyWith(loading: false, exception: event.errorRequestException),
       );
