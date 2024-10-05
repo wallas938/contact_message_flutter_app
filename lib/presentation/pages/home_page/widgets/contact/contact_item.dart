@@ -1,6 +1,7 @@
 import 'package:contact_message_app/business/bloc/contact/contact.bloc.dart';
 import 'package:contact_message_app/business/bloc/contact/contact.event.dart';
 import 'package:contact_message_app/business/models/contact/contact.model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,10 +18,10 @@ class ContactItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<ContactBloc, ContactState>(
       listener: (context, state) {
-        print(state.currentUser?.id);
-        if (state.currentUser?.id == contact.id) { // Corriger ici
-          GoRouter.of(context).go('/messages/${state.currentUser?.id}');
-        }
+        GoRouter.of(context).go('/messages/${state.currentUser?.id}');
+      },
+      listenWhen: (previousState, currentState) {
+        return previousState.currentUser?.id != currentState.currentUser?.id;
       },
       builder: (context, state) {
         return ListTile(
