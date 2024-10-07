@@ -1,4 +1,5 @@
 import 'package:contact_message_app/business/bloc/contact/contact.bloc.dart';
+import 'package:contact_message_app/business/bloc/contact/contact.event.dart';
 import 'package:contact_message_app/business/bloc/messages/message.bloc.dart';
 import 'package:contact_message_app/business/bloc/messages/message.event.dart';
 import 'package:contact_message_app/business/models/contact/contact.model.dart';
@@ -31,15 +32,22 @@ class MessagePage extends StatelessWidget {
               },
             ),
             actions: [
-              IconButton(
-                icon: const Icon(
-                  Icons.arrow_back,
-                  color: Colors.blue,
-                ),
-                onPressed: () {
-                  GoRouter.of(context).go("/home");
-                },
-              )
+              BlocConsumer<ContactBloc, ContactState>(builder: (context, state) {
+                return IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.blue,
+                  ),
+                  onPressed: () {
+                    context.read<ContactBloc>().add(ContactResetCurrentUserStartEvent());
+                  },
+                );
+              }, listener: (context, state) {
+                GoRouter.of(context).go("/home");
+              },
+              listenWhen: (context, state) {
+                return  state.currentUser == null;
+              },)
             ],
             backgroundColor: Colors.white,
             leading: Builder(
