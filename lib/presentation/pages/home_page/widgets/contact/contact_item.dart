@@ -19,16 +19,16 @@ class ContactItem extends StatelessWidget {
     return BlocConsumer<ContactBloc, ContactState>(
       listener: (context, state) {
         if (kDebugMode) {
-          print(contact);
+          print(state.currentUser.id);
         }
-        GoRouter.of(context).go('/messages/${state.currentUser?.id}');
+        GoRouter.of(context).go('/messages/${state.currentUser.id}');
       },
       listenWhen: (previousState, currentState) {
-        return contact == currentState.currentUser;
+        return contact.id == currentState.currentUser.id;
       },
       builder: (context, state) {
         return ListTile(
-          onTap: () {
+          onTap: () async {
             context
                 .read<ContactBloc>()
                 .add(ContactSetCurrentUserStartEvent(userId: contact.id));

@@ -10,8 +10,8 @@ import 'package:contact_message_app/common/core/exception.error.dart';
 class ContactState extends Equatable {
   final List<ContactModel> contacts;
   final ContactRole contactRole;
-  final ContactModel? currentUser;
-  final ContactModel? receiver;
+  final ContactModel currentUser;
+  final ContactModel receiver;
   final bool loading;
   final ErrorRequestException exception;
 
@@ -28,8 +28,8 @@ class ContactState extends Equatable {
         exception = const ErrorRequestException.initialState(),
         contactRole = ContactRole.contact,
         contacts = [],
-        receiver = null,
-        currentUser = null;
+        receiver = const ContactModel.initialReceiverState(),
+        currentUser = const ContactModel.initialUserState();
 
   ContactState copyWith(
       {ContactModel? currentUser,
@@ -71,7 +71,8 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
 
     on<ContactGetAllStartEvent>((event, emit) async {
       emit(state.copyWith(
-          loading: true, exception: const ErrorRequestException.initialState()));
+          loading: true,
+          exception: const ErrorRequestException.initialState()));
       try {
         List<ContactModel> payload = await contactRepository.getAllContacts();
         add(ContactGetAllSuccessEvent(contacts: payload));
@@ -95,7 +96,8 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
 
     on<ContactSetCurrentUserStartEvent>((event, emit) async {
       emit(state.copyWith(
-          loading: true, exception: const ErrorRequestException.initialState()));
+          loading: true,
+          exception: const ErrorRequestException.initialState()));
       try {
         ContactModel payload =
             await contactRepository.getContactById(event.userId);
@@ -118,22 +120,27 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
 
     /* ------------- RESET CURRENT USER ---------------*/
 
-    on<ContactResetCurrentUserStartEvent>((event, emit) async {
+    on<ContactResetCurrentUserStartEvent>((event, emit) {
       emit(state.copyWith(
-          loading: true, exception: const ErrorRequestException.initialState()));
+          loading: true,
+          exception: const ErrorRequestException.initialState()));
       try {
         add(ContactResetCurrentUserSuccessEvent());
       } on Exception {
         const error = ErrorRequestException(
-            errorMessage: "Erreur lors du chargement du destinataire",
+            errorMessage: "Erreur lors de la réinitialisation de l'utilisateur",
             hasError: true);
         add(ContactResetCurrentUserFailedEvent(errorRequestException: error));
       }
     });
-    on<ContactResetCurrentUserSuccessEvent>((event, emit) async {
-      emit(state.copyWith(currentUser: null, loading: false));
+    on<ContactResetCurrentUserSuccessEvent>((event, emit) {
+      emit(state.copyWith(
+          currentUser: const ContactModel.initialUserState(), loading: false));
+      if (kDebugMode) {
+        print(state.currentUser);
+      }
     });
-    on<ContactResetCurrentUserFailedEvent>((event, emit) async {
+    on<ContactResetCurrentUserFailedEvent>((event, emit) {
       emit(
         state.copyWith(loading: false, exception: event.errorRequestException),
       );
@@ -143,7 +150,8 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
 
     on<ContactSetCurrentReceiverByIdStartEvent>((event, emit) async {
       emit(state.copyWith(
-          loading: true, exception: const ErrorRequestException.initialState()));
+          loading: true,
+          exception: const ErrorRequestException.initialState()));
       try {
         ContactModel payload =
             await contactRepository.getContactById(event.receiverId);
@@ -172,14 +180,16 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
 
     on<ContactResetCurrentReceiverStartEvent>((event, emit) async {
       emit(state.copyWith(
-          loading: true, exception: const ErrorRequestException.initialState()));
+          loading: true,
+          exception: const ErrorRequestException.initialState()));
       try {
         add(ContactResetCurrentReceiverSuccessEvent());
       } on Exception {
         const error = ErrorRequestException(
             errorMessage: "Erreur lors du chargement du destinataire",
             hasError: true);
-        add(ContactResetCurrentReceiverFailedEvent(errorRequestException: error));
+        add(ContactResetCurrentReceiverFailedEvent(
+            errorRequestException: error));
       }
     });
     on<ContactResetCurrentReceiverSuccessEvent>((event, emit) async {
@@ -195,7 +205,8 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
 
     on<ContactGetByRoleStartEvent>((event, emit) async {
       emit(state.copyWith(
-          loading: true, exception: const ErrorRequestException.initialState()));
+          loading: true,
+          exception: const ErrorRequestException.initialState()));
       try {
         // List<ContactModel> payload =
         //     await contactRepository.getContactsByRole(event.role);

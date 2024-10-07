@@ -6,6 +6,7 @@ import 'package:contact_message_app/business/models/contact/contact.model.dart';
 import 'package:contact_message_app/presentation/pages/message_page/widgets/message/message.drawer.widget.dart';
 import 'package:contact_message_app/presentation/pages/message_page/widgets/message/message.header.widget.dart';
 import 'package:contact_message_app/presentation/pages/message_page/widgets/message/message.list.widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -32,22 +33,30 @@ class MessagePage extends StatelessWidget {
               },
             ),
             actions: [
-              BlocConsumer<ContactBloc, ContactState>(builder: (context, state) {
-                return IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.blue,
-                  ),
-                  onPressed: () {
-                    context.read<ContactBloc>().add(ContactResetCurrentUserStartEvent());
-                  },
-                );
-              }, listener: (context, state) {
-                GoRouter.of(context).go("/home");
-              },
-              listenWhen: (context, state) {
-                return  state.currentUser == null;
-              },)
+              BlocConsumer<ContactBloc, ContactState>(
+                builder: (context, state) {
+                  return IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.blue,
+                    ),
+                    onPressed: () {
+                      context
+                          .read<ContactBloc>()
+                          .add(ContactResetCurrentUserStartEvent());
+                    },
+                  );
+                },
+                listener: (context, state) {
+                  if (kDebugMode) {
+                    print(state.currentUser.id);
+                  }
+                  GoRouter.of(context).go("/home");
+                },
+                listenWhen: (context, state) {
+                  return state.currentUser == const ContactModel.initialUserState();
+                },
+              )
             ],
             backgroundColor: Colors.white,
             leading: Builder(

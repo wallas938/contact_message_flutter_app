@@ -23,7 +23,7 @@ class ContactModel extends Equatable {
         role = ContactRole.contact;
 
   const ContactModel.initialReceiverState()
-      : id = '1',
+      : id = 'Init',
         name = "",
         profile = "NO",
         scores = 0,
