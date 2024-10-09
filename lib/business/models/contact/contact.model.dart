@@ -15,7 +15,21 @@ class ContactModel extends Equatable {
       required this.scores,
       required this.role});
 
+  const ContactModel.initialUserState()
+      : id = 'Init',
+        name = "",
+        profile = "NO",
+        scores = 0,
+        role = ContactRole.contact;
+
+  const ContactModel.initialReceiverState()
+      : id = 'Init',
+        name = "",
+        profile = "NO",
+        scores = 0,
+        role = ContactRole.contact;
+
   @override
   // TODO: implement props
-  List<Object?> get props => [name, profile, scores, role];
+  List<Object?> get props => [id];
 }

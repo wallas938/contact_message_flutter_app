@@ -4,8 +4,18 @@ import 'package:contact_message_app/business/models/contact/contact.enum.dart';
 import 'package:contact_message_app/core/router/router.bloc.dart';
 import 'package:contact_message_app/presentation/pages/home_page/widgets/contact/contact_list.dart';
 import 'package:contact_message_app/presentation/pages/home_page/widgets/menu/menu_button_list.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+class Person extends Equatable {
+  const Person(this.name);
+
+  final String name;
+
+  @override
+  List<Object> get props => [name];
+}
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
