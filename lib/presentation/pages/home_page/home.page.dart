@@ -8,15 +8,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Person extends Equatable {
-  const Person(this.name);
-
-  final String name;
-
-  @override
-  List<Object> get props => [name];
-}
-
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 

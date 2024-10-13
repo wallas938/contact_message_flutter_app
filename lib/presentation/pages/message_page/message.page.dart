@@ -11,10 +11,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class MessagePage extends StatelessWidget {
+class MessagePage extends StatefulWidget {
   final String contactId;
 
   const MessagePage({super.key, required this.contactId});
+
+  @override
+  State<MessagePage> createState() => _MessagePageState();
+}
+
+class _MessagePageState extends State<MessagePage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context
+        .read<ContactBloc>()
+        .add(ContactSetCurrentUserStartEvent(userId: widget.contactId));
+    context
+        .read<MessageBloc>()
+        .add(MessageGetThreadStartEvent(conversationData: ));
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +46,7 @@ class MessagePage extends StatelessWidget {
               builder: (context, state) {
                 return MessageHeaderWidget(
                   profile: state.contacts
-                      .firstWhere((e) => contactId == e.id)
+                      .firstWhere((e) => widget.contactId == e.id)
                       .profile,
                 );
               },
@@ -54,7 +73,8 @@ class MessagePage extends StatelessWidget {
                   GoRouter.of(context).go("/home");
                 },
                 listenWhen: (context, state) {
-                  return state.currentUser == const ContactModel.initialUserState();
+                  return state.currentUser ==
+                      const ContactModel.initialUserState();
                 },
               )
             ],
@@ -73,20 +93,14 @@ class MessagePage extends StatelessWidget {
           drawer: BlocConsumer<ContactBloc, ContactState>(
             builder: (context, state) {
               List<ContactModel> receivers = state.contacts
-                  .where((contact) => contact.id != contactId)
+                  .where((contact) => contact.id != widget.contactId)
                   .toList();
               return MessageDrawerWidget(
-                userId: contactId,
+                userId: widget.contactId,
                 receivers: receivers,
               );
             },
-            listener: (context, state) {
-              if (state.receiver == null) {
-                context.read<MessageBloc>().add(MessageGetThreadStartEvent(
-                    conversationData:
-                        ContactConversationPair(from: contactId, to: "1")));
-              }
-            },
+            listener: (context, state) {},
           ),
           body: BlocBuilder<MessageBloc, MessageState>(
             builder: (context, state) {
@@ -98,7 +112,7 @@ class MessagePage extends StatelessWidget {
                 return Center(child: Text(state.exception.errorMessage));
               }
               return MessageListWidget(
-                  messages: state.messages, contactId: contactId);
+                  messages: state.messages, contactId: widget.contactId);
             },
           )),
     );
