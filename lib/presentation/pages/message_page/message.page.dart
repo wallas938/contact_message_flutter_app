@@ -1,7 +1,6 @@
 import 'package:contact_message_app/business/bloc/contact/contact.bloc.dart';
 import 'package:contact_message_app/business/bloc/contact/contact.event.dart';
 import 'package:contact_message_app/business/bloc/messages/message.bloc.dart';
-import 'package:contact_message_app/business/bloc/messages/message.event.dart';
 import 'package:contact_message_app/business/models/contact/contact.model.dart';
 import 'package:contact_message_app/presentation/pages/message_page/widgets/message/message.drawer.widget.dart';
 import 'package:contact_message_app/presentation/pages/message_page/widgets/message/message.header.widget.dart';
@@ -21,7 +20,6 @@ class MessagePage extends StatefulWidget {
 }
 
 class _MessagePageState extends State<MessagePage> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -29,92 +27,87 @@ class _MessagePageState extends State<MessagePage> {
     context
         .read<ContactBloc>()
         .add(ContactSetCurrentUserStartEvent(userId: widget.contactId));
-    context
-        .read<MessageBloc>()
-        .add(MessageGetThreadStartEvent(conversationData: ));
-
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            toolbarHeight: 80,
-            title: BlocBuilder<ContactBloc, ContactState>(
-              builder: (context, state) {
-                return MessageHeaderWidget(
+      child: BlocBuilder<ContactBloc, ContactState>(
+        builder: (context, state) {
+          if (state.currentUser == const ContactModel.initialUserState()) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return Scaffold(
+              backgroundColor: Colors.white,
+              appBar: AppBar(
+                toolbarHeight: 80,
+                title: MessageHeaderWidget(
                   profile: state.contacts
                       .firstWhere((e) => widget.contactId == e.id)
                       .profile,
-                );
-              },
-            ),
-            actions: [
-              BlocConsumer<ContactBloc, ContactState>(
-                builder: (context, state) {
-                  return IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.blue,
-                    ),
-                    onPressed: () {
-                      context
-                          .read<ContactBloc>()
-                          .add(ContactResetCurrentUserStartEvent());
+                ),
+                actions: [
+                  BlocConsumer<ContactBloc, ContactState>(
+                    builder: (context, state) {
+                      return IconButton(
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.blue,
+                        ),
+                        onPressed: () {
+                          context
+                              .read<ContactBloc>()
+                              .add(ContactResetCurrentUserStartEvent());
+                        },
+                      );
                     },
+                    listener: (BuildContext context, ContactState state) {
+                      if (state.currentUser ==
+                          const ContactModel.initialUserState()) {
+                        GoRouter.of(context).go("/home");
+                      }
+                    },
+                  )
+                ],
+                backgroundColor: Colors.white,
+                leading: Builder(
+                  builder: (context) {
+                    return IconButton(
+                      icon: const Icon(Icons.menu),
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                    );
+                  },
+                ),
+              ),
+              drawer: BlocConsumer<ContactBloc, ContactState>(
+                builder: (context, state) {
+                  List<ContactModel> receivers = state.contacts
+                      .where((contact) => contact.id != widget.contactId)
+                      .toList();
+                  return MessageDrawerWidget(
+                    userId: widget.contactId,
+                    receivers: receivers,
                   );
                 },
-                listener: (context, state) {
-                  if (kDebugMode) {
-                    print(state.currentUser.id);
+                listener: (context, state) {},
+              ),
+              body: BlocBuilder<MessageBloc, MessageState>(
+                builder: (context, state) {
+                  if (state.loading) {
+                    return const Center(child: CircularProgressIndicator());
                   }
-                  GoRouter.of(context).go("/home");
-                },
-                listenWhen: (context, state) {
-                  return state.currentUser ==
-                      const ContactModel.initialUserState();
-                },
-              )
-            ],
-            backgroundColor: Colors.white,
-            leading: Builder(
-              builder: (context) {
-                return IconButton(
-                  icon: const Icon(Icons.menu),
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer();
-                  },
-                );
-              },
-            ),
-          ),
-          drawer: BlocConsumer<ContactBloc, ContactState>(
-            builder: (context, state) {
-              List<ContactModel> receivers = state.contacts
-                  .where((contact) => contact.id != widget.contactId)
-                  .toList();
-              return MessageDrawerWidget(
-                userId: widget.contactId,
-                receivers: receivers,
-              );
-            },
-            listener: (context, state) {},
-          ),
-          body: BlocBuilder<MessageBloc, MessageState>(
-            builder: (context, state) {
-              if (state.loading) {
-                return const Center(child: CircularProgressIndicator());
-              }
 
-              if (state.exception.hasError) {
-                return Center(child: Text(state.exception.errorMessage));
-              }
-              return MessageListWidget(
-                  messages: state.messages, contactId: widget.contactId);
-            },
-          )),
+                  if (state.exception.hasError) {
+                    return Center(child: Text(state.exception.errorMessage));
+                  }
+                  return MessageListWidget(
+                      messages: state.messages, contactId: widget.contactId);
+                },
+              ));
+        },
+      ),
     );
   }
 }

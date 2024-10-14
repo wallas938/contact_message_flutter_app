@@ -41,8 +41,6 @@ class MessageFormWidget extends StatelessWidget {
                     onPressed: () {
                       if (controller.text.isNotEmpty) {
                         if (kDebugMode) {
-                          print(receiverId);
-
                           context.read<MessageBloc>().add(
                               MessagePostMessageStartEvent(
                                   message: MessageModel(

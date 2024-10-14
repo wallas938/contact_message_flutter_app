@@ -1,9 +1,5 @@
-import 'package:contact_message_app/business/bloc/contact/contact.bloc.dart';
-import 'package:contact_message_app/business/bloc/contact/contact.event.dart';
 import 'package:contact_message_app/business/models/contact/contact.model.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class ContactItem extends StatelessWidget {

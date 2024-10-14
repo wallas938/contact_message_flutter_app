@@ -23,18 +23,21 @@ final routes = GoRouter(
       name: 'messages',
       path: '/messages/:contactId',
       builder: (context, state) {
-        if (state.pathParameters["contactId"] != null) {
-          String contactId = state.pathParameters["contactId"] as String;
-          return MessagePage(contactId: contactId);
+        if (kDebugMode) {
+          print(state.pathParameters["contactId"]);
         }
-        return const SafeArea(child: HomePage());
+        return MessagePage(
+            contactId: state.pathParameters["contactId"] as String);
       },
+
+//   if (state.pathParameters["contactId"] != null) {
+//     String contactId = state.pathParameters["contactId"] as String;
+//     return MessagePage(contactId: contactId);
+//   }
+//   return const SafeArea(child: HomePage());
+// },
       redirect: (context, state) {
         final isAuthorized = context.read<MyRouterBloc>().state.isAuthorized;
-
-        if (kDebugMode) {
-          print(state.path);
-        }
 
         if (kDebugMode) {
           print("User is Authorized: $isAuthorized");

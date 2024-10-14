@@ -29,10 +29,10 @@ class ContactReceiverListWidget extends StatelessWidget
             visible: !isCurrentUser(userId, receivers[index]),
             child: BlocConsumer<ContactBloc, ContactState>(
                 listener: (context, state) {
-              if (state.receiver?.id == receivers[index].id) {
+              if (state.receiver.id == receivers[index].id) {
                 context.read<MessageBloc>().add(MessageGetThreadStartEvent(
                     conversationData: ContactConversationPair(
-                        from: userId, to: state.receiver!.id)));
+                        from: userId, to: state.receiver.id)));
               }
             }, builder: (context, state) {
               // isReceiverSelected(index, state.receiver)
