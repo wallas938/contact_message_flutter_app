@@ -16,15 +16,15 @@ class ContactModel extends Equatable {
       required this.role});
 
   const ContactModel.initialUserState()
-      : id = 'Init',
-        name = "",
+      : id = 'NULL',
+        name = "Unknown",
         profile = "NO",
         scores = 0,
         role = ContactRole.contact;
 
   const ContactModel.initialReceiverState()
-      : id = 'Init',
-        name = "",
+      : id = 'NULL',
+        name = "Unknown",
         profile = "NO",
         scores = 0,
         role = ContactRole.contact;

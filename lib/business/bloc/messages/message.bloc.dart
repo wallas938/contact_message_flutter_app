@@ -29,8 +29,8 @@ class MessageState extends Equatable {
   List<Object?> get props => [messages, loading, exception];
 }
 
-MessageState initialState = MessageState(
-    messages: const [],
+MessageState initialState = const MessageState(
+    messages: [],
     loading: false,
     exception: ErrorRequestException.initialState());
 
@@ -42,7 +42,7 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
 
     on<MessageGetThreadStartEvent>((event, emit) async {
       emit(state.copyWith(
-          loading: true, exception: ErrorRequestException.initialState()));
+          loading: true, exception: const ErrorRequestException.initialState()));
       try {
         List<MessageModel> payload =
             await messageRepository.getConversation(event.conversationData);
@@ -70,7 +70,7 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
 
     on<MessagePostMessageStartEvent>((event, emit) {
       emit(state.copyWith(
-          loading: true, exception: ErrorRequestException.initialState()));
+          loading: true, exception: const ErrorRequestException.initialState()));
       try {
         messageRepository.postMessage(event.message);
 

@@ -171,7 +171,7 @@ class Database {
     int randomNumber = 0 + random.nextInt(10 - 0);
 
     return Future.delayed(
-        const Duration(milliseconds: 0),
+        const Duration(milliseconds: 1000),
         () => randomNumber >= 0
             ? _contacts.firstWhere((c) => userId == c.id)
             : throw Exception("Erreur Test"));
