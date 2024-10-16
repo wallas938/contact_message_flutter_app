@@ -122,12 +122,12 @@ class ContactResetCurrentUserFailedEvent extends ContactEvent {
 /*  SET MESSAGE RECEIVER  */
 
 class ContactSetCurrentReceiverByIdStartEvent extends ContactEvent {
-  final String receiverId;
+  final ContactModel receiver;
 
-  ContactSetCurrentReceiverByIdStartEvent({required this.receiverId});
+  ContactSetCurrentReceiverByIdStartEvent({required this.receiver});
   @override
   // TODO: implement props
-  List<Object?> get props => [receiverId];
+  List<Object?> get props => [receiver];
 }
 
 class ContactSetCurrentReceiverByIdSuccessEvent extends ContactEvent {

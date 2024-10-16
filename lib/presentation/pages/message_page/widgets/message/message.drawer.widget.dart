@@ -14,10 +14,6 @@ class MessageDrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (context.select((ContactBloc c) => c.state.receiver) == null) {
-      context.read<ContactBloc>().add(
-          ContactSetCurrentReceiverByIdStartEvent(receiverId: receivers[0].id));
-    }
     return Drawer(
       child: Column(
         children: [

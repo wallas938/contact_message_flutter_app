@@ -148,17 +148,15 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
 
     /* ------------- SET CURRENT RECEIVER BY ID---------------*/
 
-    on<ContactSetCurrentReceiverByIdStartEvent>((event, emit) async {
+    on<ContactSetCurrentReceiverByIdStartEvent>((event, emit) {
       emit(state.copyWith(
           loading: true,
           exception: const ErrorRequestException.initialState()));
       try {
-        ContactModel payload =
-            await contactRepository.getContactById(event.receiverId);
         if (kDebugMode) {
-          print("Current Receiver: $payload");
+          print("Current Receiver: ${event.receiver}");
         }
-        add(ContactSetCurrentReceiverByIdSuccessEvent(receiver: payload));
+        add(ContactSetCurrentReceiverByIdSuccessEvent(receiver: event.receiver));
       } on Exception {
         const error = ErrorRequestException(
             errorMessage: "Erreur lors du chargement des contacts par rôle",
@@ -167,10 +165,10 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
             errorRequestException: error));
       }
     });
-    on<ContactSetCurrentReceiverByIdSuccessEvent>((event, emit) async {
+    on<ContactSetCurrentReceiverByIdSuccessEvent>((event, emit) {
       emit(state.copyWith(receiver: event.receiver, loading: false));
     });
-    on<ContactSetCurrentReceiverByIdFailedEvent>((event, emit) async {
+    on<ContactSetCurrentReceiverByIdFailedEvent>((event, emit) {
       emit(
         state.copyWith(loading: false, exception: event.errorRequestException),
       );
