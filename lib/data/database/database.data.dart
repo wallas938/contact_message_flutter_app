@@ -4,6 +4,7 @@ import 'package:contact_message_app/business/bloc/contact/contact.bloc.dart';
 import 'package:contact_message_app/business/models/contact/contact.enum.dart';
 import 'package:contact_message_app/business/models/contact/contact.model.dart';
 import 'package:contact_message_app/business/models/message/message.model.dart';
+import 'package:uuid/v4.dart';
 
 class Database {
   /// *   Contact Data    **
@@ -184,7 +185,7 @@ class Database {
     int randomNumber = 0 + random.nextInt(10 - 0);
 
     return Future.delayed(
-        const Duration(milliseconds: 0),
+        const Duration(milliseconds: 3000),
         () => randomNumber >= 0
             ? _messages
                 .where((m) =>
@@ -199,11 +200,21 @@ class Database {
   Future<MessageModel> postMessage(MessageModel message) async {
     Random random = Random();
     int randomNumber = 0 + random.nextInt(10 - 0);
-
+    MessageModel autoResponse = MessageModel(
+        id: const UuidV4().generate(),
+        content: "auto response to : ${message.from}",
+        date: DateTime.now(),
+        from: message.to,
+        to: message.from);
     await Future.delayed(
         const Duration(milliseconds: 0),
         () => randomNumber >= 0
             ? _messages.add(message)
+            : throw Exception("Erreur Test"));
+    await Future.delayed(
+        const Duration(milliseconds: 0),
+        () => randomNumber >= 0
+            ? _messages.add(autoResponse)
             : throw Exception("Erreur Test"));
 
     return message;
