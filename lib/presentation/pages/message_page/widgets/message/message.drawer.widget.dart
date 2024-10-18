@@ -1,9 +1,6 @@
-import 'package:contact_message_app/business/bloc/contact/contact.bloc.dart';
-import 'package:contact_message_app/business/bloc/contact/contact.event.dart';
 import 'package:contact_message_app/business/models/contact/contact.model.dart';
 import 'package:contact_message_app/presentation/pages/home_page/widgets/contact/contact.receiver.list.widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MessageDrawerWidget extends StatelessWidget {
   final List<ContactModel> receivers;

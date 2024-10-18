@@ -5,7 +5,6 @@ import 'package:contact_message_app/business/models/contact/contact.model.dart';
 import 'package:contact_message_app/presentation/pages/message_page/widgets/message/message.drawer.widget.dart';
 import 'package:contact_message_app/presentation/pages/message_page/widgets/message/message.header.widget.dart';
 import 'package:contact_message_app/presentation/pages/message_page/widgets/message/message.list.widget.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -95,13 +94,6 @@ class _MessagePageState extends State<MessagePage> {
               ),
               body: BlocBuilder<MessageBloc, MessageState>(
                 builder: (context, state) {
-                  if (state.loading) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  if (state.exception.hasError) {
-                    return Center(child: Text(state.exception.errorMessage));
-                  }
                   return MessageListWidget(
                       messages: state.messages, contactId: widget.contactId);
                 },

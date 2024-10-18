@@ -1,4 +1,5 @@
 import 'package:contact_message_app/business/bloc/contact/contact.bloc.dart';
+import 'package:contact_message_app/business/bloc/messages/message.bloc.dart';
 import 'package:contact_message_app/business/models/message/message.model.dart';
 import 'package:contact_message_app/presentation/pages/message_page/widgets/message/message.form.widget.dart';
 import 'package:contact_message_app/presentation/pages/message_page/widgets/message/message.item.widget.dart';
@@ -19,22 +20,35 @@ class MessageListWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded(
-            child: ListView.builder(
-                itemCount: messages.length,
-                itemBuilder: (context, index) {
-                  return MessageItemWidget(
-                    message: messages[index],
-                    userId: contactId,
-                  );
-                }),
+          BlocBuilder<MessageBloc, MessageState>(
+            builder: (context, state) {
+              if (state.loading) {
+                return const Expanded(
+                    child: Center(child: CircularProgressIndicator()));
+              }
+              if (state.exception.hasError) {
+                return Expanded(
+                    child: Center(child: Text(state.exception.errorMessage)));
+              }
+              return Expanded(
+                child: ListView.builder(
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      return MessageItemWidget(
+                        message: messages[index],
+                        userId: contactId,
+                      );
+                    }),
+              );
+            },
           ),
-          Expanded(
+          SizedBox(
+            height: 250,
             child: BlocBuilder<ContactBloc, ContactState>(
               builder: (context, state) {
                 return MessageFormWidget(
                   userId: contactId,
-                  receiverId: state.receiver != null ? state.receiver!.id : "0",
+                  receiverId: state.receiver.id,
                 );
               },
             ),
